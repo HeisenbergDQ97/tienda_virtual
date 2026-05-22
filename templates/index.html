@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="col">
+      <h1>{{ message }}</h1>
+
+      <ul  class="list-group">
+        {% for product in products %}
+        <li class="list-group-item">
+          {{product.title}}
+          
+          <span class="text-success">${{product.price}}</span> 
+
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+      <img src="{% static 'image/mochila.png' %}" alt="imagen de mochila">
+    
+    </div>
+
+        
+
+
+      
+{% endblock %}
+
+

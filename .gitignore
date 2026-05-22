@@ -1,0 +1,28 @@
+cat > .gitignore << EOF
+# Entorno virtual
+venv/
+env/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Base de datos
+db.sqlite3
+
+# Archivos de media
+media/
+
+# Django
+*.log
+*.pot
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+*.swp
+EOF
