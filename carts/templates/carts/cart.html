@@ -36,16 +36,24 @@
                 </tr>
                 {% endfor %}
             </tbody> 
-
+        </table>
     </div>
     <div class="col">
-       
+        <div class="card">
+            <div class="card-body">
+                <div class="fw-bold">
+                    Subtotal({{ cart.products.count }}): <span class="text-danger">{{ cart.subtotal|price_format }}</span>
+                </div>
+                <div class=" mt-2">
+                    <a href="#" class="btn btn-warning ">Proceder al pago</a>
+                </div>
+            </div>
+        </div>
     </div>
  {% else %}
     <div class="col">
-        <p class="h3 font-weight-bold text-danger"> No hay productos en el carrito</p>
-        <p><a href="{% url 'index' %}">Volver a la tienda</a></p>
-
+        <p class="h3 fw-bold text-danger"> No hay productos en el carrito.</p>
+        <a href="{% url 'index' %}">Volver a la tienda</a>
     </div>
  {%endif%}
 
