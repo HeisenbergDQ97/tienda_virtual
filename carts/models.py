@@ -37,11 +37,28 @@ class Cart(models.Model):
     def products_related(self):
         return self.cartproducts_set.select_related('product')
 
+
+class CartProductsManager(models.Manager):
+    def create_or_update_quantity(self, cart, product, quantity=1):
+        objetct, created = self.get_or_create(cart=cart, product=product)
+
+        if not created:
+            quanty = objetct.quantity + quantity
+            
+        objetct.update_quantity(quanty)
+        return objetct
+
 class CartProducts(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = CartProductsManager()
+
+    def update_quantity(self, quantity=1):
+        self.quantity = quantity
+        self.save()
 
 
 def set_cart_id(sender, instance, *args, **kwargs):
