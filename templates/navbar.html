@@ -19,11 +19,13 @@
                     <span class="fas fa-shopping-cart"></span> Mi carrito
                 </a>
             </li>
-            <li class="navbar-item {% if request.path == shipping_addresses %} active {% endif %}">
-                <a class="nav-link" href="{{ shipping_addresses }}">
-                    <span class="fas fa-location-arrow"></span> Mis direcciones
-                </a>
-            </li>
+            {% if user.is_authenticated %}
+                <li class="navbar-item {% if request.path == shipping_addresses %} active {% endif %}">
+                    <a class="nav-link" href="{{ shipping_addresses }}">
+                        <span class="fas fa-location-arrow"></span> Mis direcciones
+                    </a>
+                </li>
+            {% endif %}
         </ul>
 
         <ul class = "navbar-nav ml-auto w-100" style="justify-content: flex-end;">
