@@ -8,7 +8,7 @@ class ShippingAddress(models.Model):
     line2 = models.CharField(max_length=200, blank=True)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
-    county = models.CharField(max_length=50)
+    country = models.CharField(max_length=50)
     reference = models.CharField(max_length=300)
     postal_code = models.CharField(max_length=10, null= False, blank= False)
     default =  models.BooleanField(default=False)
