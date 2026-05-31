@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+from .utils import breadcrumb
 from .utils import get_or_create_order
 from carts.utils import get_or_create_cart
 
@@ -16,4 +17,5 @@ def order(request):
     return render(request, 'orders/order.html', {
          'cart': cart,
          'order': order,
+         'breadcrumb': breadcrumb()
     })

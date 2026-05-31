@@ -2,6 +2,7 @@
 {% url 'register' as register %}
 {% url 'logout' as logout %}
 {% url 'carts:cart' as cart %}
+{% url 'shipping_addresses:shipping_addresses' as shipping_addresses %}
 
 <nav class= 'navbar navbar-expand-md bg-dark navbar-dark'>
     <a href = "{% url 'index' %}" class="navbar-brand"> Tienda Virtual</a>
@@ -12,10 +13,15 @@
 
     <div id= "navb" class = "navbar-collapse collapse hide">
 
-        <ul class = "navbar-nav">
-            <li class = "navbar-item {% if request.path == cart %} active {% endif %}">
-                <a class ="nav-link" href = "{{ cart }}" >
-                    <span class="fas fa-shopping-cart" ></span>
+        <ul class="navbar-nav">
+            <li class="navbar-item {% if request.path == cart %} active {% endif %}">
+                <a class="nav-link" href="{{ cart }}">
+                    <span class="fas fa-shopping-cart"></span> Mi carrito
+                </a>
+            </li>
+            <li class="navbar-item {% if request.path == shipping_addresses %} active {% endif %}">
+                <a class="nav-link" href="{{ shipping_addresses }}">
+                    <span class="fas fa-location-arrow"></span> Mis direcciones
                 </a>
             </li>
         </ul>
