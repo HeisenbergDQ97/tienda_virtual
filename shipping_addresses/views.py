@@ -6,6 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render
 from django.shortcuts import reverse
 from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 
 from django.urls import reverse_lazy
 
@@ -57,12 +58,13 @@ class ShippingAddressDeleteView(LoginRequiredMixin, DeleteView):
         
 @login_required(login_url='login')
 def create(request):
+
     form = ShippingAddressForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
         shipping_address = form.save(commit=False)
         shipping_address.user = request.user
-        shipping_address.default = not ShippingAddress.objects.filter(user=request.user).exists()
+        shipping_address.default = not request.user.has_shipping_address()
 
         shipping_address.save()
 
@@ -73,3 +75,17 @@ def create(request):
     return render(request, 'shipping_addresses/create.html',{
         'form': form
     })
+
+@login_required(login_url='login')
+def default(request, pk):
+    shipping_address= get_object_or_404(ShippingAddress, pk=pk)
+
+    if request.user.id != shipping_address.user_id:
+        return redirect('carts:cart')
+    
+    if request.user.has_shipping_address():
+        request.user.shipping_address.update_default()
+
+    shipping_address.update_default(True)
+
+    return redirect('shipping_addresses:shipping_addresses')
