@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import reverse
 from django.shortcuts import redirect
@@ -17,6 +18,9 @@ from .forms import ShippingAddressForm
 from django.views.generic import ListView
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
+
+from carts.utils import get_or_create_cart
+from orders.utils import get_or_create_order
 
 
 class ShippingAddressListView(LoginRequiredMixin, ListView):
@@ -54,6 +58,10 @@ class ShippingAddressDeleteView(LoginRequiredMixin, DeleteView):
         
         if request.user.id != self.get_object().user_id:
             return redirect('carts:cart')
+        
+        if self.get_object().has_orders():
+            return redirect('shipping_addresses:shipping_addresses')
+
         return super(ShippingAddressDeleteView, self).dispatch(request, *args, **kwargs)
         
 @login_required(login_url='login')
@@ -67,6 +75,15 @@ def create(request):
         shipping_address.default = not request.user.has_shipping_address()
 
         shipping_address.save()
+
+        if request.GET.get('next'):
+            if request.GET['next'] == reverse('orders:address'):
+                cart = get_or_create_cart(request)
+                order = get_or_create_order(cart, request)
+
+                order.update_shipping_address(shipping_address)
+
+                return HttpResponseRedirect(request.GET['next'])
 
         messages.success(request, 'Dirección creada exitosamente')
         return redirect('shipping_addresses:shipping_addresses')
