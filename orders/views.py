@@ -1,7 +1,12 @@
+from django.contrib import messages
+
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .utils import breadcrumb
+from .utils import destroy_order
 from .utils import get_or_create_order
+
+from carts.utils import destroy_cart
 from carts.utils import get_or_create_cart
 
 from .models import Order
@@ -78,3 +83,20 @@ def confirm(request):
         'breadcrumb': breadcrumb(address=True, confirmation=True)
     })
 
+
+@login_required(login_url='login')
+def cancel(request):
+    cart = get_or_create_cart(request)
+    order = get_or_create_order(cart,request)
+
+    if request.user.id != order.user_id:
+        return redirect('carts:cart')
+    
+    order.cancel()
+
+    destroy_cart(request)
+    destroy_order(request, order)
+
+    messages.error(request, 'Orden cancelada')
+    return redirect('index')
+    
