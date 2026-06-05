@@ -19,8 +19,9 @@
     </div>
   </div>
   
-  <div class="col-4"> 
-    {% include 'orders/snippets/resume.html' %}
+  <div class="col"> 
+    {% url 'orders:address' as next_url %}
+    {% include 'orders/snippets/resume.html' with next_url=next_url %}
   </div>
 </div>
 {% endblock %}
