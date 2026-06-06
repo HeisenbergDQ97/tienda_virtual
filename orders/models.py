@@ -67,6 +67,5 @@ def set_order_id(sender, instance, *args, **kwargs):
 def set_total(sender, instance, *arg, **kwargs):
     instance.total = instance.get_total()
 
-
 pre_save.connect(set_order_id, sender=Order)
 pre_save.connect(set_total, sender =Order)
